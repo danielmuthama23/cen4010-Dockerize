@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        /* Custom background color for the navigation bar */
+        .navbar-custom {
+            background-color: #4CAF50; /* Green */
+        }
+
+        /* Custom text color for the navigation links */
+        .navbar-custom .navbar-nav .nav-link {
+            color: #fff; /* White */
+        }
+
+        /* Custom background color for the content container */
+        .content-container {
+            background-color: #f2f2f2; /* Light gray */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Custom header style */
+        h1 {
+            color: #4CAF50; /* Green */
+        }
+
+        /* Custom text color for paragraphs */
+        p {
+            color: #333; /* Dark gray */
+        }
+
+        /* Custom heading style */
+        .custom-heading {
+            background-color: #fff; /* White */
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 36px; /* Bigger font size */
+            font-family: 'Lucida Handwriting', cursive; /* Fancy font */
+            text-transform: uppercase; /* Uppercase text */
+            color: #401ed4; /* Dark green */
+        }
+
+        /* Custom style for the smaller and italicized text */
+        .small-green-text {
+            font-size: 14px; /* Smaller font size */
+            color: #4CAF50; /* Green */
+            text-align: center;
+            font-style: italic; /* Italicize text */
+        }
+.instruction {
+    font-size: 20px; /* Smaller font size */
+    text-align: center;
+    font-family: 'Lucida Handwriting', cursive; /* Fancy font */
+    color: blue;
+}
+        /* Custom style for navbar buttons on hover */
+        .navbar-custom .navbar-nav .nav-link:hover {
+            background-color: #357934; /* Dark green when hovered */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">Student Management</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="addStudent.html">Add Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="updateStudent.html">Update Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="deleteStudent.html">Delete Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="displayStudent.html">Display Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="listStudent.html">List All Students</a>
+                </li>
+                
+            </ul>
+            <!-- Bootstrap Search Bar -->
+            <form class="form-inline ml-auto" onsubmit="searchStudents(); return false;">
+                <input id="last_name_search" class="form-control mr-sm-2" type="search" placeholder="Search by Last Name" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Custom Heading -->
+    <div class="custom-heading">
+        <h1>Welcome to Student Registry</h1>
+        <p style="font-size: 18px; color: #357934;">System designed to track students</p>
+    </div>
+    <div class="instruction">
+    <p> To begin, pick from one of the menu options above. Or, use the search bar to search for any student by last name!</p>
+</div>
+    <!-- Your JavaScript for the search functionality -->
+    <script>
+        // Function to perform the search
+        function searchStudents() {
+            var last_name = $("#last_name_search").val();
+
+            // You can implement your AJAX request here to fetch search results
+            // Example:
+            $.ajax({
+                url: "http://localhost:8080/students/search/" + last_name,
+                type: "get",
+                success: function (students) {
+                    console.log(students);
+                    var studentList = "<h2>Search Results</h2>";
+                    if (students.length > 0) {
+                        studentList += "<ul>";
+                        students.forEach(function (student) {
+                            studentList += "<li><strong>Record ID:</strong> " + student.record_id + "</li>";
+                            studentList += "<li><strong>First Name:</strong> " + student.first_name + "</li>";
+                            studentList += "<li><strong>Last Name:</strong> " + student.last_name + "</li>";
+                            studentList += "<li><strong>GPA:</strong> " + student.gpa + "</li>";
+                            studentList += "<li><strong>Enrolled:</strong> " + student.enrolled + "</li>";
+                            studentList += "<br>";
+                        });
+                        studentList += "</ul>";
+                    } else {
+                        studentList += "No students found with the provided last name.";
+                    }
+                    $("#studentList").html(studentList);
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText)
+                    $("#studentList").text('Error: Unable to perform the search.');
+                }
+            });
+        }
+    </script>
+   
+    <!-- Content -->
+    <div class="container mt-4 content-container">
+        <p class="small-green-text">Hadeel Abdelhamid Z#23519664</p>
+    </div>
+
+    <!-- Display Search Results Here -->
+    <div id="studentList" class="container mt-4 content-container"></div>
+
+    <!-- Include Bootstrap JavaScript and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</body>
+
+</html>

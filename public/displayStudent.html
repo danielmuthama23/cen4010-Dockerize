@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <title>View Student</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom CSS for text enlargement and centering */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f8f9fa; /* Light gray background */
+      margin: 0;
+    }
+
+    /* Center the navigation bar at the top */
+    .navbar-container {
+      width: 100%;
+      background-color: #4CAF50; /* Green */
+    }
+
+    .navbar-custom {
+      background-color: transparent; /* Make the navbar background transparent */
+    }
+
+    /* Custom text color for the navigation links */
+    .navbar-custom .navbar-nav .nav-link {
+      color: #fff; /* White */
+    }
+
+    /* Highlight the active tab */
+    .navbar-custom .navbar-nav .nav-item.active .nav-link {
+      background-color: #357934; /* Highlighted tab background color */
+    }
+
+    .content-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
+    .form-container {
+      border: 2px solid #4CAF50; /* Green square border around the form */
+      padding: 20px;
+      width: 400px; /* Set a fixed width for the form container */
+      display: flex;
+      flex-direction: column; /* Display elements in a column */
+      align-items: center; /* Center elements horizontally within the container */
+      margin-top: 20px; /* Add space above the form */
+    }
+
+    .form-title {
+      font-size: 24px; /* Enlarge font */
+      color: #4CAF50; /* Green text color for title */
+      margin-bottom: 20px; /* Add space between title and form */
+    }
+
+    label {
+      font-size: 24px; /* Enlarge font */
+      margin-bottom: 10px; /* Add space between labels and inputs */
+    }
+
+    input[type="text"] {
+      font-size: 24px; /* Enlarge font */
+      border: 2px solid #4CAF50; /* Green border for input fields */
+      padding: 5px;
+      width: 100%; /* Make input fields full width */
+      margin-bottom: 10px; /* Add space between input fields */
+    }
+
+    button {
+      background-color: #4CAF50; /* Green button background */
+      border: none;
+      color: white; /* White button text */
+      padding: 10px 20px;
+      font-size: 24px; /* Enlarge font */
+      margin-top: 10px; /* Add space above buttons */
+    }
+
+    /* Style for the "Back to Homepage" button */
+    .btn-back {
+      background-color: #4CAF50; /* Green button background */
+      border: none;
+      color: white; /* White button text */
+      padding: 10px 20px;
+      font-size: 24px; /* Enlarge font */
+      margin-top: 10px; /* Add space above buttons */
+    }
+  </style>
+    <script>
+      // Function to perform the search
+      function searchStudents() {
+          var last_name = $("#last_name_search").val();
+  
+          // You can implement your AJAX request here to fetch search results
+          // Example:
+          $.ajax({
+              url: "http://localhost:8080/students/search/" + last_name,
+              type: "get",
+              success: function (students) {
+                  console.log(students);
+                  var studentList = "<h2>Search Results</h2>";
+                  if (students.length > 0) {
+                      studentList += "<ul>";
+                      students.forEach(function (student) {
+                          studentList += "<li><strong>Record ID:</strong> " + student.record_id + "</li>";
+                          studentList += "<li><strong>First Name:</strong> " + student.first_name + "</li>";
+                          studentList += "<li><strong>Last Name:</strong> " + student.last_name + "</li>";
+                          studentList += "<li><strong>GPA:</strong> " + student.gpa + "</li>";
+                          studentList += "<li><strong>Enrolled:</strong> " + student.enrolled + "</li>";
+                          studentList += "<br>";
+                      });
+                      studentList += "</ul>";
+                  } else {
+                      studentList += "No students found with the provided last name.";
+                  }
+                  $("#studentList").html(studentList);
+              },
+              error: function (xhr) {
+                  console.log(xhr.responseText)
+                  $("#studentList").text('Error: Unable to perform the search.');
+              }
+          });
+      }
+  
+      // Bind the form submission event to the searchStudents function
+      $(document).ready(function() {
+        $("form").submit(function(event) {
+          event.preventDefault(); // Prevent the default form submission
+          searchStudents(); // Call the searchStudents function
+        });
+      });
+    </script>
+</head>
+<body>
+
+  <script>
+    // Function to perform the search
+    function searchStudents() {
+        var last_name = $("#last_name_search").val();
+
+        // You can implement your AJAX request here to fetch search results
+        // Example:
+        $.ajax({
+            url: "http://localhost:8080/students/search/" + last_name,
+            type: "get",
+            success: function (students) {
+                console.log(students);
+                var studentList = "<h2>Search Results</h2>";
+                if (students.length > 0) {
+                    studentList += "<ul>";
+                    students.forEach(function (student) {
+                        studentList += "<li><strong>Record ID:</strong> " + student.record_id + "</li>";
+                        studentList += "<li><strong>First Name:</strong> " + student.first_name + "</li>";
+                        studentList += "<li><strong>Last Name:</strong> " + student.last_name + "</li>";
+                        studentList += "<li><strong>GPA:</strong> " + student.gpa + "</li>";
+                        studentList += "<li><strong>Enrolled:</strong> " + student.enrolled + "</li>";
+                        studentList += "<br>";
+                    });
+                    studentList += "</ul>";
+                } else {
+                    studentList += "No students found with the provided last name.";
+                }
+                $("#studentList").html(studentList);
+            },
+            error: function (xhr) {
+                console.log(xhr.responseText)
+                $("#studentList").text('Error: Unable to perform the search.');
+            }
+        });
+    }
+</script>
+  <!-- Navigation Bar Container -->
+  <div class="navbar-container">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <a class="navbar-brand" href="#">Student Management</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="addStudent.html">Add Student</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="updateStudent.html">Update Student</a>
+          </li>
+          <li class="nav-item"> 
+            <a class="nav-link" href="deleteStudent.html">Delete Student</a>
+          </li>
+          <li class="nav-item active"><!-- Highlighted tab -->
+            <a class="nav-link" href="displayStudent.html">Display Student</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="listStudent.html">List All Students</a>
+          </li>
+         
+        </ul>
+        <!-- Bootstrap Search Bar -->
+        <form class="form-inline ml-auto" onsubmit="searchStudents(); return false;">
+          <input id="last_name_search" class="form-control mr-sm-2" type="search" placeholder="Search by Last Name" aria-label="Search">
+          <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+  </div>
+<!-- Display Search Results Here -->
+<div id="studentList" class="container mt-4 content-container"></div>
+
+
+  <div class="content-container mt-4">
+    <h1>View Student</h1>
+    <form id="displayStudentForm" class="form-container">
+      <div class="form-group">
+        <label for="record_id">Student Record ID:</label>
+        <input type="text" class="form-control" id="record_id" name="record_id" required>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="viewStudent()">View Student</button>
+      <div id="studentDetails" name="studentDetails"></div>
+    </form>
+
+    <!-- Back to Homepage button with the same style as View Student button -->
+    <button class="btn btn-primary mt-3 btn-back" onclick="window.location.href='index2.html'">Back to Homepage</button>
+  </div>
+
+  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    function viewStudent() {
+      var record_id = $("#record_id").val();
+
+      $.ajax({
+        url: `http://localhost:8080/students/${record_id}`,
+        type: "get",
+        dataType: "json", // Ensure that JSON is expected
+        success: function (student) {
+          console.log(student);
+          var studentDetails = $("#studentDetails");
+          if (student.message === 'error - resource not found') {
+            studentDetails.text('No students found with the provided record ID.');
+          } else {
+            var html = `
+              <h2>Student Details</h2>
+              <p><strong>Record ID:</strong> ${student.record_id}</p>
+              <p><strong>First Name:</strong> ${student.first_name}</p>
+              <p><strong>Last Name:</strong> ${student.last_name}</p>
+              <p><strong>GPA:</strong> ${student.gpa}</p>
+              <p><strong>Enrolled:</strong> ${student.enrolled}</p>
+            `;
+            studentDetails.html(html);
+          }
+        },
+        error: function (xhr) {
+          console.log(xhr.status); // Log the HTTP status code
+          console.log(xhr.statusText); // Log the HTTP status text
+          console.log(xhr.responseText); // Log the response text from the server
+
+          $("#studentDetails").text('Error: Failed to retrieve student data.');
+        }
+      });
+    }
+         // Function to perform the search
+   function searchStudents() {
+            var last_name = $("#last_name_search").val();
+
+            // You can implement your AJAX request here to fetch search results
+            // Example:
+            $.ajax({
+                url: "http://localhost:8080/students/search/" + last_name,
+                type: "get",
+                success: function (students) {
+                    console.log(students);
+                    var studentList = "<h2>Search Results</h2>";
+                    if (students.length > 0) {
+                        studentList += "<ul>";
+                        students.forEach(function (student) {
+                            studentList += "<li><strong>Record ID:</strong> " + student.record_id + "</li>";
+                            studentList += "<li><strong>First Name:</strong> " + student.first_name + "</li>";
+                            studentList += "<li><strong>Last Name:</strong> " + student.last_name + "</li>";
+                            studentList += "<li><strong>GPA:</strong> " + student.gpa + "</li>";
+                            studentList += "<li><strong>Enrolled:</strong> " + student.enrolled + "</li>";
+                            studentList += "<br>";
+                        });
+                        studentList += "</ul>";
+                    } else {
+                        studentList += "No students found with the provided last name.";
+                    }
+                    $("#studentList").html(studentList);
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText)
+                    $("#studentList").text('Error: Unable to perform the search.');
+                }
+            });
+        }
+    
+    
+  </script>
+
+
+</body>
+</html>

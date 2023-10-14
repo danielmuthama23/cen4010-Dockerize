@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Student</title>
+  <!-- Include Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom CSS for text enlargement and centering */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+
+    .navbar-custom {
+        background-color: #4CAF50; 
+    }
+
+    .navbar-custom .navbar-nav .nav-link {
+        color: #fff; 
+    }
+
+    /* Custom background color for the content container */
+    .content-container {
+        background-color: #f2f2f2; /* Light gray */
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    /* Custom header style */
+    .form-title {
+      font-size: 24px;
+      color: #4CAF50; /* Green text color for title */
+      margin-bottom: 20px; /* Add space between title and form */
+    }
+
+    label {
+      font-size: 24px; /* Enlarge font */
+      margin-bottom: 10px; /* Add space between labels and inputs */
+    }
+
+    input[type="text"] {
+      font-size: 24px; /* Enlarge font */
+      border: 2px solid #4CAF50; /* Green border for input fields */
+      padding: 5px;
+      width: 100%; /* Make input fields full width */
+      margin-bottom: 10px; /* Add space between input fields */
+    }
+
+    button {
+      background-color: #4CAF50; /* Green button background */
+      border: none;
+      color: white; /* White button text */
+      padding: 10px 20px;
+      font-size: 24px; /* Enlarge font */
+      margin-top: 10px; /* Add space above buttons */
+    }
+
+    /* Custom style for the verification note */
+    #verification-note {
+      font-size: 24px;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+  <script>
+    // Function to perform the search
+    function searchStudents() {
+        var last_name = $("#last_name_search").val();
+
+        // You can implement your AJAX request here to fetch search results
+        // Example:
+        $.ajax({
+            url: "http://localhost:8080/students/search/" + last_name,
+            type: "get",
+            success: function (students) {
+                console.log(students);
+                var studentList = "<h2>Search Results</h2>";
+                if (students.length > 0) {
+                    studentList += "<ul>";
+                    students.forEach(function (student) {
+                        studentList += "<li><strong>Record ID:</strong> " + student.record_id + "</li>";
+                        studentList += "<li><strong>First Name:</strong> " + student.first_name + "</li>";
+                        studentList += "<li><strong>Last Name:</strong> " + student.last_name + "</li>";
+                        studentList += "<li><strong>GPA:</strong> " + student.gpa + "</li>";
+                        studentList += "<li><strong>Enrolled:</strong> " + student.enrolled + "</li>";
+                        studentList += "<br>";
+                    });
+                    studentList += "</ul>";
+                } else {
+                    studentList += "No students found with the provided last name.";
+                }
+                $("#studentList").html(studentList);
+            },
+            error: function (xhr) {
+                console.log(xhr.responseText)
+                $("#studentList").text('Error: Unable to perform the search.');
+            }
+        });
+    }
+</script>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom">
+      <a class="navbar-brand" href="#">Student Management</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link" href="addStudent.html" style="background-color: #357934;">Add Student</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="updateStudent.html">Update Student</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="deleteStudent.html">Delete Student</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="displayStudent.html">Display Student</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="listStudent.html">List All Students</a>
+              </li>
+             
+          </ul>
+          <!-- Bootstrap Search Bar -->
+          <form class="form-inline ml-auto" onsubmit="searchStudents(); return false;">
+            <input id="last_name_search" class="form-control mr-sm-2" type="search" placeholder="Search by Last Name" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+ <!-- Display Search Results Here -->
+ <div id="studentList" class="container mt-4 content-container"></div>
+ 
+  <div class="container mt-4 content-container">
+    <div class="form-title">Add Student</div> <!-- Title -->
+    
+    <label for="fname">First Name:</label>
+    <input type="text" id="fname" name="fname">
+
+    <label for="lname">Last Name:</label>
+    <input type="text" id="lname" name="lname">
+
+    <label for="gpa">GPA:</label>
+    <input type="text" id="gpa" name="gpa">
+
+    <label for="enrolled">Enrolled:</label>
+    <input type="text" id="enrolled" name="enrolled">
+
+    <button onclick="sendStudent()">Submit</button>
+    <button onclick="goToHomePage()">Back to Home</button>
+
+    <div id="mydiv" name="mydiv"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <script>
+    function sendStudent() {
+  var fname_val = $("#fname").val();
+  var lname_val = $("#lname").val();
+  var gpa_val = $("#gpa").val();
+  var enrolled_val = $("#enrolled").val();
+
+  $.ajax({
+    url: "http://localhost:8080/students",
+    type: "post",
+    data: {
+      first_name: fname_val,
+      last_name: lname_val,
+      gpa: gpa_val,
+      enrolled: enrolled_val
+    },
+    success: function (response) {
+      console.log("Success Response:", response); // Debugging statement
+
+      // Add verification note
+      if (response.success) {
+        console.log("Student added successfully!"); // Debugging statement
+        $("#verification-note").text("Student added successfully!");
+        $("#verification-note").css("color", "green"); // Green color for success
+      } else {
+        console.log("Student addition failed!"); // Debugging statement
+        $("#verification-note").text("Student addition failed!");
+        $("#verification-note").css("color", "red"); // Red color for failure
+      }
+    },
+    error: function (xhr) {
+      console.log("Error Response:", xhr.responseText); // Debugging statement
+      $("#mydiv").text('error: ' + xhr.responseText);
+
+      // Add verification note for error
+      $("#verification-note").text("An error occurred while adding the student.");
+      $("#verification-note").css("color", "red"); // Red color for error
+    }
+  });
+}
+
+    function goToHomePage() {
+      window.location.href = "index2.html"; // Replace with the actual path to your index.html
+    }
+
+   
+        // Function to perform the search
+        function searchStudents() {
+            var last_name = $("#last_name_search").val();
+
+            // You can implement your AJAX request here to fetch search results
+            // Example:
+            $.ajax({
+                url: "http://localhost:8080/students/search/" + last_name,
+                type: "get",
+                success: function (students) {
+                    console.log(students);
+                    var studentList = "<h2>Search Results</h2>";
+                    if (students.length > 0) {
+                        studentList += "<ul>";
+                        students.forEach(function (student) {
+                            studentList += "<li><strong>Record ID:</strong> " + student.record_id + "</li>";
+                            studentList += "<li><strong>First Name:</strong> " + student.first_name + "</li>";
+                            studentList += "<li><strong>Last Name:</strong> " + student.last_name + "</li>";
+                            studentList += "<li><strong>GPA:</strong> " + student.gpa + "</li>";
+                            studentList += "<li><strong>Enrolled:</strong> " + student.enrolled + "</li>";
+                            studentList += "<br>";
+                        });
+                        studentList += "</ul>";
+                    } else {
+                        studentList += "No students found with the provided last name.";
+                    }
+                    $("#studentList").html(studentList);
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText)
+                    $("#studentList").text('Error: Unable to perform the search.');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
